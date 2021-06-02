@@ -30,9 +30,8 @@ def home():
 def upload():
     global ERROR
 
-    img = request.files.get("img")
-
     try:
+        img = request.files.get("img")
         s3.Bucket(BUCKET).put_object(Key=img.filename, Body=img.read())
         return redirect(url_for("upload_success"))
 
