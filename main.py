@@ -15,10 +15,15 @@ BUCKET = 'mdinh-aws-challenge'
 def get_uploaded_files():
     return [f.key for f in s3.Bucket(BUCKET).objects.all()]
 
+
 @app.route("/")
 def home():
-    print(get_uploaded_files())
-    return render_template("home.html")
+    global ERROR
+    ERROR = None
+
+    uploaded_files = get_uploaded_files()
+
+    return render_template("home.html", uploaded_files=uploaded_files)
 
 
 @app.route("/upload", methods=["POST"])

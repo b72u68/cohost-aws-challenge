@@ -3,6 +3,9 @@
   <head>
     <title>I steal your meme</title>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script>
       const loadFile = (event) => {
         const image = document.getElementById('uploaded_img');
@@ -19,16 +22,32 @@
   </script>
   </head>
   <body>
-      <h1>Give me your meme</h1>
-      <form action="{{ url_for('upload') }}" method="POST" enctype = "multipart/form-data">
-          <p>
-              <label for"img">Upload your meme here:</label>
-              <input type="file" id="img" name="img" accept="image/*" onchange="loadFile(event)" />
-          </p>
-          <img id="uploaded_img" />
-          <p>
-              <input type="submit" id="upload_btn" value="Upload" disabled/>
-          </p>
-      </form>
+      <div class="container-fluid">
+          <div class="col-sm-6">
+              <h1>Give me your meme</h1>
+              <form action="{{ url_for('upload') }}" method="POST" enctype = "multipart/form-data">
+                  <p>
+                      <label for"img">Upload your meme here:</label>
+                      <input type="file" id="img" name="img" accept="image/*" onchange="loadFile(event)" />
+                  </p>
+                  <img id="uploaded_img" />
+                  <p>
+                      <input type="submit" id="upload_btn" value="Upload" disabled/>
+                  </p>
+              </form>
+          </div>
+          <div class="col-sm-6">
+              {% if uploaded_files|length == 0 %}
+              <h1>No memes were stolen!</h1>
+              {% else %}
+              <h1>Stolen memes</h1>
+              <ul>
+              {% for file in uploaded_files %}
+              <li>{file}</li>
+              {% endfor %}
+              </ul>
+              {% endif %}
+          </div>
+      </div>
   </body>
 </html>
