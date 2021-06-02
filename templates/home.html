@@ -30,7 +30,9 @@
                       <label for"img">Upload your meme here:</label>
                       <input type="file" id="img" name="img" accept="image/*" onchange="loadFile(event)" />
                   </p>
-                  <img id="uploaded_img" />
+		  <p>
+                  <img width="500" id="uploaded_img" />
+		  </p>
                   <p>
                       <input type="submit" id="upload_btn" value="Upload" disabled/>
                   </p>
@@ -43,7 +45,7 @@
               <h1>Stolen memes</h1>
               <ul>
               {% for file in uploaded_files %}
-              <li>{file}</li>
+	      <li>{{file}}</li>
               {% endfor %}
               </ul>
               {% endif %}
