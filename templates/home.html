@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>I steal your meme</title>
+  <script>
+      const loadFile = (event) => {
+        const image = document.getElementById('uploaded_img');
+        const uploadButton = document.getElementById('upload_btn');
+
+        if (event.target.files.length > 0) {
+            image.src = URL.createObjectURL(event.target.files[0]);
+            uploadButton.disabled = false;
+        } else {
+            image.src = "";
+            uploadButton.disabled = true;
+        }
+      };
+  </script>
+  </head>
+  <body>
+      <h1>Give me your meme</h1>
+      <form action="{{ url_for('upload') }}" method="POST" enctype = "multipart/form-data">
+          <p>
+              <label for"img">Upload your meme here:</label>
+              <input type="file" id="img" name="img" accept="image/*" onchange="loadFile(event)" />
+          </p>
+          <img id="uploaded_img" />
+          <p>
+              <input type="submit" id="upload_btn" value="Upload" disabled/>
+          </p>
+      </form>
+  </body>
+</html>
