@@ -8,16 +8,15 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
     />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div>
-      <h1>Upload Successfully</h1>
-      <p>
-        <a href="{{ url_for('home') }}">
-          <button type="button">Home</button>
-        </a>
-      </p>
+    <div class="container-fluid">
+      <div class="text-center"><h1>Upload Successful</h1></div>
+      <a href="{{ url_for('home') }}">
+        <button class="btn btn-block btn-primary" type="button">Home</button>
+      </a>
     </div>
   </body>
 </html>

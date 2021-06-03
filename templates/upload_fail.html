@@ -2,20 +2,44 @@
 <html>
   <head>
     <title>I steal your meme</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        const handleErrorBtn = () => {
+            const errorMsg = document.getElementById('error-msg');
+            const errorBtn = document.getElementById('error-btn');
+
+            if (errorMsg.style.display == "none") {
+                errorMsg.style.display = "block";
+                errorBtn.className = "btn btn-block btn-default";
+                errorBtn.innerText = "Hide Error";
+            } else {
+                errorMsg.style.display = "none";
+                errorBtn.className = "btn btn-block btn-danger";
+                errorBtn.innerText = "Show Error";
+            }
+        };
+    </script>
   </head>
   <body>
-    <h1>Upload Failed</h1>
-    <p>
-    <h3>Error: {{error}}</h3>
-    </p>
-    <p>
+    <div class="container-fluid">
+      <div class="text-center"><h1>Upload Failed</h1></div>
+      <div>
       <a href="{{ url_for('home') }}">
-        <button type="button">Home</button>
+        <button class="btn btn-block btn-primary">Home</button>
       </a>
-    </p>
+      <br>
+      <button id="error-btn" class="btn btn-block btn-danger" onclick="handleErrorBtn()">Show Error</button>
+      <br>
+      <div class="border border-dark">
+      <h4 id="error-msg" style="display: none">{{error}}</h4>
+      </div>
+    </div>
   </body>
 </html>

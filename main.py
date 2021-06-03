@@ -9,11 +9,11 @@ app = Flask(__name__)
 s3 = boto3.resource('s3')
 
 ERROR = None
-BUCKET = 'mdinh-aws-challenge'
+BUCKET = s3.Bucket('mdinh-aws-challenge')
 
 
 def get_uploaded_files():
-    return [f.key for f in s3.Bucket(BUCKET).objects.all()]
+    return [f.key for f in BUCKET.objects.all()]
 
 
 @app.route("/")
@@ -32,7 +32,7 @@ def upload():
 
     try:
         img = request.files.get("img")
-        s3.Bucket(BUCKET).put_object(Key=img.filename, Body=img.read())
+        BUCKET.put_object(Key=img.filename, Body=img.read())
         return redirect(url_for("upload_success"))
 
     except Exception as e:

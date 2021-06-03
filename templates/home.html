@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script>
       const loadFile = (event) => {
@@ -13,9 +14,11 @@
 
         if (event.target.files.length > 0) {
             image.src = URL.createObjectURL(event.target.files[0]);
+            uploadButton.className = "btn btn-primary";
             uploadButton.disabled = false;
         } else {
             image.src = "";
+            uploadButton.className = "btn btn-default";
             uploadButton.disabled = true;
         }
       };
@@ -31,10 +34,10 @@
                       <input type="file" id="img" name="img" accept="image/*" onchange="loadFile(event)" />
                   </p>
 		          <p>
-                      <img width="500" id="uploaded_img" />
+                      <img class="img-responsive" id="uploaded_img" />
 		          </p>
                   <p>
-                      <input type="submit" id="upload_btn" value="Upload" disabled/>
+                      <input class="btn btn-default" type="submit" id="upload_btn" value="Upload" disabled/>
                   </p>
               </form>
           </div>
