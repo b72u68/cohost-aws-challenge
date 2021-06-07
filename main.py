@@ -38,7 +38,7 @@ def upload():
     except Exception as e:
         ERROR = e
         print("[-] Error:", e)
-        return redirect(url_for("home"))
+        return redirect(url_for("upload_fail"))
 
 
 @app.route("/upload/success")
