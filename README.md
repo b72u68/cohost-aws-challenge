@@ -2,7 +2,7 @@
 
 ## Objective
 
-Write an image uploader website and run it on Amazon Web Services.
+Write an image uploader website and run it on Amazon Web Services using EC2 service and S3 storage.
 
 ## Tasks
 
