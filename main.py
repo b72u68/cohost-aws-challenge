@@ -49,20 +49,31 @@ def upload():
 
     try:
         img = request.files.get("img")
-        uploaded_img = BUCKET.put_object(Key=img.filename, Body=img.read()).key
+        url = s3_config["URI"] + img.filename
 
         if DB:
-            url = s3_config["URI"] + uploaded_img
             cur = DB.cursor()
-            data_to_insert = (uploaded_img, url)
-            cur.execute('insert into images (name, url) values (%s,%s)', data_to_insert)
+            data_to_insert = (img.filename, url)
+
+            try:
+                # Store filename and url in database
+                cur.execute('insert into images (name, url) values (%s,%s)',
+                            data_to_insert)
+                DB.commit()
+
+            except psycopg2.IntegrityError:
+                DB.rollback()
+
+            finally:
+                BUCKET.put_object(Key=img.filename, Body=img.read()).key
+
             cur.close()
-            DB.commit()
 
         return redirect(url_for("upload_success"))
 
     except Exception as e:
         ERROR = e
+        print('[-] Error while uploading file:\n', e)
         return redirect(url_for("upload_fail"))
 
 
