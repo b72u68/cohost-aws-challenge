@@ -1,6 +1,7 @@
 import psycopg2
 import boto3
 from flask import Flask, render_template, redirect, request, url_for
+from config import postgres, s3_config
 
 ERROR = None
 DB = None
@@ -11,24 +12,20 @@ app = Flask(__name__)
 # Initialize Amazon S3
 s3 = boto3.resource('s3')
 
-BUCKET = s3.Bucket('mdinh-aws-challenge')
+BUCKET = s3.Bucket(s3_config["BUCKET"])
+
 
 # Initialize Amazon RDS
-ENDPOINT = "mdinh-dbs.cesr1n4cmq2m.ap-southeast-1.rds.amazonaws.com"
-PORT = "5432"
-USR = "mdinh"
-REGION = "ap-southeast-1a"
-DBNAME = "mdinh-dbs"
-
 try:
-    print('[+] Connecting to the database...')
-    DB = psycopg2.connect(host=ENDPOINT,
-                          port=PORT,
-                          user=USR,
-                          password=SOME TOKEN)
+    print('\n[+] Connecting to the database...\n')
+    DB = psycopg2.connect(host=postgres["ENDPOINT"],
+                          port=postgres["PORT"],
+                          user=postgres["USR"],
+                          dbname=postgres["DBNAME"],
+                          password=postgres["PASSWORD"])
 except Exception as e:
     ERROR = e
-    print('[-] Error while connecting to the database:\n', e)
+    print('\n[-] Error while connecting to the database:\n', e)
     redirect(url_for('upload_fail'), error=ERROR)
 
 
@@ -48,13 +45,19 @@ def home():
 
 @app.route("/upload", methods=["POST"])
 def upload():
-    global ERROR
+    global DB, ERROR
 
     try:
         img = request.files.get("img")
         uploaded_img = BUCKET.put_object(Key=img.filename, Body=img.read()).key
 
-        print(uploaded_img)
+        if DB:
+            url = s3_config["URI"] + uploaded_img
+            cur = DB.cursor()
+            data_to_insert = (uploaded_img, url)
+            cur.execute('insert into images (name, url) values (%s,%s)', data_to_insert)
+            cur.close()
+            DB.commit()
 
         return redirect(url_for("upload_success"))
 
