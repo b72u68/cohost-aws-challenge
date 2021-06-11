@@ -52,17 +52,21 @@
               <h1>No memes were stolen!</h1>
               {% else %}
               <h1>Stolen memes</h1>
-              <table>
+              <table class="table table-borderless table-hover">
+              <thead>
               <tr>
                   <th>Filename</th>
                   <th>Action</th>
               </tr>
+              </thead>
+              <tbody>
               {% for file in uploaded_files %}
               <tr>
               <td>{{file}}</td>
               <td><input class="btn btn-danger" type="submit" value="Delete" onclick="deleteFile('{{file}}')" /></td>
               </tr>
               {% endfor %}
+              </tbody>
               </table>
               {% endif %}
           </div>
