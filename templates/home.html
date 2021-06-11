@@ -22,6 +22,12 @@
             uploadButton.disabled = true;
         }
       };
+
+      const deleteFile = (filename) => {
+        $.post("/delete?img=" + filename, function (data) {
+            window.location.href = data;
+        })
+      };
   </script>
   </head>
   <body>
@@ -46,11 +52,18 @@
               <h1>No memes were stolen!</h1>
               {% else %}
               <h1>Stolen memes</h1>
-              <ul>
+              <table>
+              <tr>
+                  <th>Filename</th>
+                  <th>Action</th>
+              </tr>
               {% for file in uploaded_files %}
-              <li>{{file}}</li>
+              <tr>
+              <td>{{file}}</td>
+              <td><input class="btn btn-danger" type="submit" value="Delete" onclick="deleteFile('{{file}}')" /></td>
+              </tr>
               {% endfor %}
-              </ul>
+              </table>
               {% endif %}
           </div>
       </div>

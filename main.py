@@ -2,7 +2,6 @@ import psycopg2
 import boto3
 from flask import Flask, render_template, redirect, request, url_for
 from config import postgres, s3_config
-
 ERROR = None
 DB = None
 
@@ -98,6 +97,34 @@ def upload_success():
 @app.route("/upload/fail")
 def upload_fail():
     return render_template("upload_fail.html", error=ERROR)
+
+
+@app.route("/delete", methods=["POST"])
+def delete_img():
+    global ERROR
+
+    filename = request.args.get("img")
+
+    try:
+        cur = DB.cursor()
+        cur.execute("delete from images where name = %s", (filename,))
+        DB.commit()
+        cur.close()
+
+        BUCKET.Object(filename).delete()
+
+        return url_for("home")
+
+    except Exception as e:
+        ERROR = e
+        print('[-] Error while deleting file:\n', e)
+
+        return url_for("delete_fail")
+
+
+@app.route("/delete/fail")
+def delete_fail():
+    return render_template("delete_fail.html", error=ERROR)
 
 
 if __name__ == "__main__":
