@@ -81,17 +81,12 @@ def upload():
 
             cur.close()
 
-        return redirect(url_for("upload_success"))
+        return redirect(url_for("home"))
 
     except Exception as e:
         ERROR = e
         print('[-] Error while uploading file:\n', e)
         return redirect(url_for("upload_fail"))
-
-
-@app.route("/upload/success")
-def upload_success():
-    return render_template("upload_success.html")
 
 
 @app.route("/upload/fail")
