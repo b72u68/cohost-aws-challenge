@@ -53,19 +53,32 @@ def upload():
 
         if DB:
             cur = DB.cursor()
-            data_to_insert = (img.filename, url)
 
             try:
                 # Store filename and url in database
                 cur.execute('insert into images (name, url) values (%s,%s)',
-                            data_to_insert)
+                            (img.filename, url))
                 DB.commit()
 
             except psycopg2.IntegrityError:
                 DB.rollback()
+                cur.execute('select * from images where substring(name,1,%s) = %s',
+                            (str(len(img.filename)), img.filename))
+
+                num_of_dup = len(cur.fetchall())
+
+                filename = '.'.join(img.filename.split('.')[:-1])
+                file_ext = img.filename.split('.')[-1]
+                img.filename = f'{filename}({num_of_dup}).{file_ext}'
+
+                url = s3_config["URI"] + img.filename
+
+                cur.execute('insert into images (name, url) values (%s,%s)',
+                            (img.filename, url))
+                DB.commit()
 
             finally:
-                BUCKET.put_object(Key=img.filename, Body=img.read()).key
+                BUCKET.put_object(Key=img.filename, Body=img.read())
 
             cur.close()
 
